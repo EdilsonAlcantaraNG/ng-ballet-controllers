@@ -91,7 +91,29 @@ class ProductAPIController(http.Controller):
                 'id': p.id,
                 'name': p.name,
                 'price': p.lst_price,
-                'default_code': p.default_code
+                'default_code': p.default_code or '',
+                'description': p.description_sale or '',
+                'type': p.type,  # 'consu', 'service', or 'product'
+                'uom_id': {
+                    'id': p.uom_id.id,
+                    'name': p.uom_id.name
+                },
+                'currency_id': {
+                    'id': p.currency_id.id,
+                    'name': p.currency_id.name
+                },
+                'categ_id': {
+                    'id': p.categ_id.id,
+                    'name': p.categ_id.name
+                },
+                'taxes_id': [
+                    {'id': tax.id, 'name': tax.name}
+                    for tax in p.taxes_id
+                ],
+                'barcode': p.barcode or '',
+                'active': p.active,
+                'create_date': p.create_date.isoformat() if p.create_date else None,
+                'write_date': p.write_date.isoformat() if p.write_date else None
             } for p in products]
             return Response(json.dumps({'products': result}), content_type='application/json',
                             headers=[('Access-Control-Allow-Origin', ALLOWED_ORIGIN)], status=200)
