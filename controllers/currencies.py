@@ -35,7 +35,7 @@ class CurrencyRatesAPIController(http.Controller):
                 'id': r.id,
                 'currency': r.currency_id.name,
                 'rate': r.rate,
-                'date': r.name
+                'date': r.name.strftime('%d/%m/%Y')  # Convertir date a string
             } for r in rates]
             return Response(json.dumps({'rates': result}), content_type='application/json',
                             headers=[('Access-Control-Allow-Origin', ALLOWED_ORIGIN)], status=200)
