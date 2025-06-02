@@ -1,9 +1,6 @@
-# controllers/currencies_api.py
-
 from odoo import http
 from odoo.http import request, Response
 import json
-import base64
 
 ALLOWED_ORIGIN = 'https://screen-printing-form.netlify.app'
 

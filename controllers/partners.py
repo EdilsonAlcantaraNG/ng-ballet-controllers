@@ -1,4 +1,3 @@
-# controllers/partners_api.py
 from odoo import http
 from odoo.http import request, Response
 import json
