@@ -6,7 +6,7 @@
     'website': "https://ng-balletworld.odoo.com/",
     'category': 'Uncategorized',
     'version': '0.1',
-    'depends': ['base', 'product'],
+    'depends': ['base', 'product', 'contacts', 'sale', 'currency_rate_alive'],
     'data': [],
     'installable': True,
     'auto_install': False,
