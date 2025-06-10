@@ -7,7 +7,7 @@ ALLOWED_ORIGIN = 'https://screen-printing-form.netlify.app'
 
 class ProductAPIController(http.Controller):
 
-    @http.route('/api/products_serigraphy', type='http', auth='public', methods=['GET'], csrf=False)
+    @http.route('/api/products_serigraphy', type='http', auth='public', cors='*', methods=['GET'], csrf=False)
     def get_products_starting_with_ss(self, **kwargs):
         try:
             name_filter = kwargs.get('name')
@@ -66,7 +66,7 @@ class ProductAPIController(http.Controller):
                 status=500
             )
 
-    @http.route('/public/product_image/<int:product_id>', type='http', auth='public')
+    @http.route('/public/product_image/<int:product_id>', type='http', cors='*', auth='public')
     def public_product_image(self, product_id):
         product = request.env['product.product'].sudo().browse(product_id)
         if not product.exists() or not product.image_1920:
@@ -82,18 +82,11 @@ class ProductAPIController(http.Controller):
             ]
         )
 
-    @http.route('/api/products', type='http', auth='public', methods=['GET'], csrf=False)
+    @http.route('/api/products', type='http', auth='public', cors='*', methods=['GET'], csrf=False)
     def list_products(self, **kwargs):
         try:
             domain = [(key, 'ilike', value) for key, value in kwargs.items()]
             products = request.env['product.product'].with_user(request.env.user).sudo().search(domain)
-            # result = [{
-            #     'id': p.id,
-            #     'name': p.name,
-            #     'price': p.lst_price,
-            #     'default_code': p.default_code,
-            #     'unit_measure': p.unit_measure
-            # } for p in products]
             result = [{
                 'id': p.id,
                 'name': p.name,
