@@ -107,35 +107,35 @@ class ProductAPIController(http.Controller):
                             colors.append(item)
 
                 resultado.append({
-                    'product_id': p.id,
-                    'name': p.name,
-                    'image': f"{base_url}/web/image/product.product/{p.product_variant_id.id}/image_128",
+                    'product_id': prod.id,
+                    'name': prod.name,
+                    'image': f"{base_url}/web/image/product.product/{prod.product_variant_id.id}/image_128",
 
                     # Campos adicionales
-                    'price': p.lst_price,
-                    'default_code': p.default_code or '',
-                    'description': p.description_sale or '',
-                    'type': p.type,
+                    'price': prod.product_variant_id.lst_price,
+                    'default_code': prod.default_code or '',
+                    'description': prod.description_sale or '',
+                    'type': prod.type,
                     'uom_id': {
-                        'id': p.uom_id.id,
-                        'name': p.uom_id.name
+                        'id': prod.uom_id.id,
+                        'name': prod.uom_id.name
                     },
                     'currency_id': {
-                        'id': p.currency_id.id,
-                        'name': p.currency_id.name
+                        'id': prod.currency_id.id,
+                        'name': prod.currency_id.name
                     },
                     'categ_id': {
-                        'id': p.categ_id.id,
-                        'name': p.categ_id.name
+                        'id': prod.categ_id.id,
+                        'name': prod.categ_id.name
                     },
                     'taxes_id': [
                         {'id': tax.id, 'name': tax.name}
-                        for tax in p.taxes_id
+                        for tax in prod.taxes_id
                     ],
-                    'barcode': p.barcode or '',
-                    'active': p.active,
-                    'create_date': p.create_date.isoformat() if p.create_date else None,
-                    'write_date': p.write_date.isoformat() if p.write_date else None,
+                    'barcode': prod.barcode or '',
+                    'active': prod.active,
+                    'create_date': prod.create_date.isoformat() if prod.create_date else None,
+                    'write_date': prod.write_date.isoformat() if prod.write_date else None,
 
                     # Atributos
                     'sizes': sizes,
@@ -178,10 +178,12 @@ class ProductAPIController(http.Controller):
     def list_products(self, **kwargs):
         try:
             domain = [(key, 'ilike', value) for key, value in kwargs.items()]
+            base_url = request.env['ir.config_parameter'].sudo().get_param('web.base.url')
             products = request.env['product.product'].with_user(request.env.user).sudo().search(domain)
             result = [{
-                'id': p.id,
+                'product_id': p.id,
                 'name': p.name,
+                'image': f"{base_url}/web/image/product.product/{p.product_variant_id.id}/image_128",
                 'price': p.lst_price,
                 'default_code': p.default_code or '',
                 'description': p.description_sale or '',
