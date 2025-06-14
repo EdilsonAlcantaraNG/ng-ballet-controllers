@@ -29,7 +29,7 @@ class PartnersAPIController(http.Controller):
         try:
             data = json.loads(request.httprequest.data)
             partner = request.env['res.partner'].with_user(request.env.user).sudo().create(data)
-            return Response(json.dumps({'id': partner.id, 'name': partner.name}), content_type='application/json',
+            return Response(json.dumps({'id': partner.id, 'name': partner.name, 'email': partner.email, 'phone': partner.phone }), content_type='application/json',
                             headers=[('Access-Control-Allow-Origin', ALLOWED_ORIGIN)], status=201)
         except Exception as e:
             return Response(json.dumps({'error': str(e)}), content_type='application/json',
